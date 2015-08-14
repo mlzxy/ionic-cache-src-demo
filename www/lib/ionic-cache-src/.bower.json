@@ -1,6 +1,6 @@
 {
   "name": "ionic-cache-src",
-  "version": "0.4.0",
+  "version": "0.4.3",
   "authors": [
     "Xinyu Zhang <beviszhang1993@gmail.com>"
   ],
@@ -30,14 +30,13 @@
     "ngstorage": "~0.3.7"
   },
   "homepage": "https://github.com/BenBBear/ionic-cache-src",
-  "_release": "0.4.0",
+  "_release": "0.4.3",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.0",
-    "commit": "92eed60d4fe343e49f654e48697c7d0d903cd359"
+    "tag": "v0.4.3",
+    "commit": "5ca70c8aa47077ce63c1bd8772a42b3e6f964756"
   },
   "_source": "git://github.com/BenBBear/ionic-cache-src.git",
   "_target": "~0.4.0",
-  "_originalSource": "ionic-cache-src",
-  "_direct": true
+  "_originalSource": "ionic-cache-src"
 }
