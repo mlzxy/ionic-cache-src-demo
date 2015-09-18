@@ -6,10 +6,26 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var uglify = require('gulp-uglify');
+var ngAnnotate = require('gulp-ng-annotate');
+
+
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+    sass: ['./scss/**/*.scss'],
+    csjs:['./www/lib/ionic-cache-src.js']
 };
+
+
+gulp.task('compress-ics', function() {
+    return gulp.src(paths.csjs)
+        .pipe(ngAnnotate())
+        .pipe(uglify())    
+        .pipe(gulp.dest('./www/dist/'));
+});
+
+
+
 
 gulp.task('default', ['sass']);
 

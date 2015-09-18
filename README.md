@@ -2,6 +2,7 @@
 
 Demo for https://github.com/BenBBear/ionic-cache-src/
 
+![](./img/ionic-cache-src.gif)
 
 
 # How to Run
@@ -14,11 +15,9 @@ ionic platform add ios  ## ionic platform add android
 ionic plugin add    com.ionic.keyboard \
                     cordova-plugin-console  \
                     cordova-plugin-device  \
-                    cordova-plugin-file \ 
+                    cordova-plugin-file \
                     cordova-plugin-file-transfer \
                     cordova-plugin-splashscreen  \
-                    cordova-plugin-whitelist 
+                    cordova-plugin-whitelist
 ionic run ios ## ionic run android
 ```
-
-

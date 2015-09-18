@@ -1,6 +1,5 @@
 # NOTICE
 
-- Several bugs fixed in 0.4.2, consider to update.
 - Demo and Playground: https://github.com/BenBBear/ionic-cache-src-demo
 
 
@@ -17,6 +16,7 @@ and it will take the rest work for you.
 ![](./img/cache.gif)
 
 
+![](./img/ionic-cache-src.gif)
 
 ## Install
 
