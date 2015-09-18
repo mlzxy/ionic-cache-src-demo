@@ -8,6 +8,15 @@
     };
     
 
+
+    function extend(dst,src){
+        for(var k in src)
+            dst[k] = dst[k] || src[k];
+    }
+    function ensureFunction(x, y) {
+        return typeof x == 'function' ? x : y;
+    };
+    
     // For the Default Progress Circle
     //****************************************************************************************************//
     var default_circle_style = {
@@ -38,9 +47,7 @@
         if (scope.srcIs == 'background') {
             element[0].style.background = scope.backgroundLoadingStyle;
         } else {
-            for (var k in default_circle_style) {
-                scope[k] = scope[k] || default_circle_style[k];
-            }
+            extend(scope, default_circle_style);
             var progress_circle;
 
             function addCircle() {
@@ -163,24 +170,21 @@
                         }
                     };
 
-                    angular.extend(scope, $cacheSrc);
-                    angular.extend(scope, attrs);
-
-                    function ensureFunction(x, y) {
-                        return typeof x == 'function' ? x : y;
-                    };
-
-
+                    
+                    extend(scope, $cacheSrc);
+                    for(var k in attrs){
+                        if(!angular.isFunction(scope[k])){
+                            scope[k] = attrs[k];
+                        }
+                    }                    
+                   
                     scope.onProgress = ensureFunction(scope.onProgress, angular.noop);
                     scope.onFinish = ensureFunction(scope.onFinish, angular.noop);
                     scope.onError = ensureFunction(scope.onError, angular.noop);
                     scope.onStart = ensureFunction(scope.onStart, angular.noop);
-
                     scope.uiOnProgress = ensureFunction(scope.uiOnProgress, uiOnProgress); //use default ones
                     scope.uiOnFinish = ensureFunction(scope.uiOnFinish, uiOnFinish);
                     scope.uiOnStart = ensureFunction(scope.uiOnStart, uiOnStart);
-
-
 
 
                     function addSrc(result) {
@@ -191,8 +195,6 @@
                         }
                         scope.onFinish(result);
                     };
-
-
 
 
                     if ($window.cordova) {
@@ -238,7 +240,7 @@
                                                         }, scope.onError, function(progress) {
                                                             uiData.progress = (progress.loaded / progress.total) * 100;
                                                             scope.uiOnProgress(scope, element, $compile, uiData);
-                                                            scope.onProgress(scope.progress);
+                                                            scope.onProgress(uiData.progress);
                                                         });
                                                 });
                                         }
@@ -255,6 +257,7 @@
                                 if (needDownload(attrs.cacheSrc)) {
                                     
                                     var uiData = {};
+                                    scope.onStart(attrs.cacheSrc);
                                     scope.uiOnStart(scope, element, $compile, uiData);
                                     
                                     uiData.progress = scope.progress || 0;

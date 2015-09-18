@@ -10,9 +10,19 @@ app.controller('rootCtrl',function($scope,$log){
         log('Local Finished');  
     };
 
-   
+    // Won't get called
+    $scope.onStartLocal = function(){
+        log('Local Started');
+    };
+    // Won't get called
     $scope.onProgressLocal = function(x){
         log('Local Progress With:' + x + '%');
+    };
+    
+    
+
+    $scope.onStartRemoteFirst = function(){
+        log('First Remote Started');
     };
     $scope.onFinishRemoteFirst = function(){
         log('First Remote Finished');
@@ -21,6 +31,10 @@ app.controller('rootCtrl',function($scope,$log){
         log('First Remote Progress With:' + x + '%');
     };
 
+
+    $scope.onStartRemoteSecond = function(){
+        log('Second Remote Started');
+    };
     $scope.onFinishRemoteSecond = function(){
         log('Second Remote Finished');
     };
