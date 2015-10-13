@@ -18,8 +18,8 @@
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>    
-    <script src="cordova.js"></script>
-    <script src="cordova_plugins.js"></script>
+    <!-- <script src="cordova.js"></script> -->
+    <!-- <script src="cordova_plugins.js"></script> -->
 
 
     <!-- ionic-cache-src -->   
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="item item-image">
-                    <img on-finish="onFinishLocal" on-progress="onProgressLocal" on-start="onStartLocal" cache-src="img/Rilakkuma.jpg" >
+                    <img on-finish="onFinishLocal" on-progress="onProgressLocal" on-start="onStartLocal" cache-src="img/Rilakkuma.jpg">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="item item-image">
-                    <img on-finish="onFinishRemoteFirst" on-start="onStartRemoteFirst"  on-progress="onProgressRemoteFirst" cache-src="http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg">
+                    <img on-finish="onFinishRemoteFirst" expire="{{60}}" on-start="onStartRemoteFirst" on-progress="onProgressRemoteFirst" cache-src="http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg">
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="item item-image">
-                    <img on-finish="onFinishRemoteSecond" on-start="onStartRemoteSecond"  on-progress="onProgressRemoteSecond" cache-src="http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg">
+                    <img on-finish="onFinishRemoteSecond" on-start="onStartRemoteSecond" on-progress="onProgressRemoteSecond" cache-src="http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg">
                 </div>
             </div>
 
@@ -86,18 +86,18 @@
 
 
             <div class="card">
-                <div class="item item-text-wrap" cache-src="http://farm4.static.flickr.com/3131/2877192571_3eb8bcf431.jpg" src-is="background" >
+                <div class="item item-text-wrap" cache-src="http://farm4.static.flickr.com/3131/2877192571_3eb8bcf431.jpg" src-is="background">
                     Test Background Image In Here
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             </div>
             
