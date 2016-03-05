@@ -27,7 +27,7 @@ var app = angular.module('starter', ['ionic', 'ionic-cache-src'])
             templateUrl: "templates/tabs.html"
         })
         .state('tabs.common', {
-            url: "/home",
+            url: "/common",
             views: {
                 'common-tab': {
                     templateUrl: "templates/common.html"

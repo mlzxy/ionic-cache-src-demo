@@ -81,7 +81,7 @@
 </script>
 
 <script id="templates/common.html" type="text/ng-template">
-    <ion-content>
+    <ion-content  overflow-scroll="false">
         <div class="list card">
             <div class="item">
                 <h2>Local Image</h2>
@@ -150,7 +150,7 @@
 </script>
 
 <script id="templates/ngRepeat.html" type="text/ng-template">
-    <ion-content>
+    <ion-content  overflow-scroll="false">
         <div class="list card" ng-repeat="url in ['http://img.ltn.com.tw/Upload/liveNews/BigPic/600_phpdnlnun.jpg',
                                               'http://www.pinchain.com/wp-content/uploads/2015/08/xiong150824a.jpg',
                                               'http://img.weixinyidu.com/150819/920b7360.jpg']">
@@ -199,7 +199,7 @@
 
 
 <script id="templates/video.html" type="text/ng-template">
-  <ion-content>
+  <ion-content  overflow-scroll="false">
 
     <br/>
     <br/>
@@ -209,7 +209,7 @@
             </div>
 
             <div class="item item-image">
-                    <video id="video" width="400"  controls>
+                    <video id="video" width="400"  controls cache-src="http://vjs.zencdn.net/v/oceans.png" src-is="poster">
                       <source cache-src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
                           Your browser does not support HTML5 video.
                     </video>

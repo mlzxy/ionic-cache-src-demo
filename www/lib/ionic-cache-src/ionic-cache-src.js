@@ -30,10 +30,14 @@
         showProgressCircleInDevice: true,
         circleContainerStyle: 'text-align:center'
     };
-    function getElement(element){
+    function getElement(element, force){
         switch(element[0].nodeName){
-        case 'SOURCE':
-            return element.parent();
+        case 'SOURCE':            
+            var p = element.parent();
+            if(force || p.attr('cache-src') == undefined)
+                return p;
+            else
+                return element;
         default:
             return element;
         }
@@ -213,9 +217,9 @@
                     
                     function addSrcWithoutFinish(result) {
                         if (scope.srcIs == 'background') {
-                            getElement(element).css('background',"url('" + result + "') " + scope.backgroundStyle);
+                            getElement(element, true).css('background',"url('" + result + "') " + scope.backgroundStyle);
                         } else {                            
-                            getElement(element).attr(scope.srcIs || 'src',result);                                                       
+                            getElement(element, true).attr(scope.srcIs || 'src',result);                                                       
                         }
                     }
                     function addSrc(result) {
