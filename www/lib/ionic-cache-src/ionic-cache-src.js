@@ -30,14 +30,11 @@
         showProgressCircleInDevice: true,
         circleContainerStyle: 'text-align:center'
     };
-    function getElement(element, force){
+    function getElement(element){
         switch(element[0].nodeName){
-        case 'SOURCE':            
-            var p = element.parent();
-            if(force || p.attr('cache-src') == undefined)
-                return p;
-            else
-                return element;
+        case 'SOURCE':                        
+            return element.parent();
+            
         default:
             return element;
         }
@@ -51,16 +48,20 @@
         scope.progress = uiData.progress;
     };
     var uiOnStart = function(scope, element, $compile, uiData) {
+        // debugger;
+        var elm = getElement(element);
         if (scope.srcIs == 'background') {
-            element.css('background',scope.backgroundLoadingStyle);            
-        } else {
+            elm.css('background',scope.backgroundLoadingStyle);            
+        }
+        else if(element[0].nodeName != 'VIDEO' && element[0].nodeName != 'AUDIO')
+        {
             extend(scope, default_circle_style);
             var progress_circle;            
             function addCircle() {
                 progress_circle = makeProgressCircle(scope, $compile);
-                uiData.display = element.css('display');
-                element.css('display', 'none');
-                element.after(progress_circle);
+                uiData.display = elm.css('display');
+                elm.css('display', 'none');
+                elm.after(progress_circle);
             };
 
             if (window.cordova) {
@@ -76,9 +77,10 @@
         }
     };
     var uiOnFinish = function(scope, element, $compile, uiData) {
-        if (scope.srcIs != 'background') {
+        if (scope.srcIs != 'background' && (element[0].nodeName != 'VIDEO' && element[0].nodeName != 'AUDIO'))  {
+            var elm = getElement(element);
             function rmCircle() {
-                element.css('display', uiData.display);
+                elm.css('display', uiData.display);
                 uiData.progress_circle.remove();
             }
             if (window.cordova) {
@@ -217,9 +219,9 @@
                     
                     function addSrcWithoutFinish(result) {
                         if (scope.srcIs == 'background') {
-                            getElement(element, true).css('background',"url('" + result + "') " + scope.backgroundStyle);
+                            getElement(element).css('background',"url('" + result + "') " + scope.backgroundStyle);
                         } else {                            
-                            getElement(element, true).attr(scope.srcIs || 'src',result);                                                       
+                            getElement(element).attr(scope.srcIs || 'src',result);                                                       
                         }
                     }
                     function addSrc(result) {
@@ -254,8 +256,8 @@
                         function fetchRemote() {
                             var uiData = {};
                             scope.onStart(attrs.cacheSrc);
-                            var elem = getElement(element);
-                            scope.uiOnStart(scope, elem, $compile, uiData);
+                            // var elem = getElement(element);
+                            scope.uiOnStart(scope, element, $compile, uiData);
                             
                             
                             var ext = '.' + attrs.cacheSrc.split('.').pop();
@@ -267,11 +269,11 @@
                                     if (scope.expire !== Infinity) {
                                         create_time[attrs.cacheSrc] = Date.now();
                                     }
-                                    scope.uiOnFinish(scope, elem, $compile, uiData);
+                                    scope.uiOnFinish(scope, element, $compile, uiData);
                                     addSrc(getCacheDir() + fileName);
                                 }, scope.onError, function(progress) {
                                     uiData.progress = (progress.loaded / progress.total) * 100;
-                                    scope.uiOnProgress(scope, elem, $compile, uiData);
+                                    scope.uiOnProgress(scope, element, $compile, uiData);
                                     scope.onProgress(uiData.progress);
                                 });
 
@@ -314,21 +316,21 @@
                         scope.$watch('attrs.cacheSrc', function() {
                             if (attrs.cacheSrc) {
                                 if (needDownload(attrs.cacheSrc)) {
-                                    var elem = getElement(element);
+                                    // var elem = getElement(element);
                                     var uiData = {};
                                     scope.onStart(attrs.cacheSrc);
-                                    scope.uiOnStart(scope, elem, $compile, uiData);
+                                    scope.uiOnStart(scope, element, $compile, uiData);
                                     
                                     uiData.progress = scope.progress || 0;
                                     // debugger;
                                     var promise = $interval(function() {
                                         uiData.progress += 10;
-                                        scope.uiOnProgress(scope, elem, $compile, uiData);
+                                        scope.uiOnProgress(scope, element, $compile, uiData);
                                         scope.onProgress(uiData.progress);
 
                                         if (uiData.progress == 100) {
                                             $interval.cancel(promise);
-                                            scope.uiOnFinish(scope, elem, $compile, uiData);
+                                            scope.uiOnFinish(scope, element, $compile, uiData);
                                             addSrc(attrs.cacheSrc);
                                         }
                                     }, scope.interval);
