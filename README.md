@@ -12,7 +12,7 @@ Demo for https://github.com/BenBBear/ionic-cache-src/
 git clone https://github.com/BenBBear/ionic-cache-src-demo ./ionic-cache-src-demo
 cd ./ionic-cache-src-demo
 ionic platform add ios  ## ionic platform add android
-ionic plugin add    com.ionic.keyboard \
+ionic plugin add    ionic-plugin-keyboard \
                     cordova-plugin-console  \
                     cordova-plugin-device  \
                     cordova-plugin-file \
