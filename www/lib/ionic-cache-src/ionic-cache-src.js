@@ -235,6 +235,8 @@
                                     return $window.cordova.file.documentsDirectory;
                                 case 'Android':
                                     return $window.cordova.file.dataDirectory;
+                                case 'windows':		
+                                    return $window.cordova.file.dataDirectory;
                             }
                             return '';
                         };
@@ -285,8 +287,7 @@
 
                         
                         $ionicPlatform
-                            .ready()
-                            .then(function() {
+                            .ready(function() {
                                 scope.$watch('attrs.cacheSrc',
                                                function() {
                                                    // debugger;
