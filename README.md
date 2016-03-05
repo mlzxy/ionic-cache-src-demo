@@ -3,7 +3,7 @@
 Demo for https://github.com/BenBBear/ionic-cache-src/
 
 ![](./img/ionic-cache-src.gif)
-
+![](https://github.com/BenBBear/ionic-cache-src/raw/master/img/demo.gif)
 
 # How to Run
 
