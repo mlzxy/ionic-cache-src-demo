@@ -21,3 +21,17 @@ ionic plugin add    com.ionic.keyboard \
                     cordova-plugin-whitelist
 ionic run ios ## ionic run android
 ```
+
+
+## iOS 9 NSAppTransportSecurity
+
+Because iOS 9 forbids arbitrary http request, you may add
+
+```xml
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key><true/>
+</dict>
+```
+
+to you `.plist` file. Details in this gist: https://gist.github.com/mlynch/284699d676fe9ed0abfa
