@@ -30,7 +30,15 @@
         showProgressCircleInDevice: true,
         circleContainerStyle: 'text-align:center'
     };
-
+    function getElement(element){
+        switch(element[0].nodeName){
+        case 'SOURCE':
+            return element.parent();
+        default:
+            return element;
+        }
+    }
+    
     function makeProgressCircle($scope, $compile) {
         return angular.element($compile('<div style="{{circleContainerStyle}}"><div round-progress  max="max"  current="progress"  color="{{color}}" bgcolor="{{bgcolor}}"  radius="{{radius}}"  stroke="{{stroke}}"  rounded="rounded" clockwise="clockwise" iterations="{{iterations}}"  animation="{{animation}}"></div></div>')($scope));
     };
@@ -40,11 +48,10 @@
     };
     var uiOnStart = function(scope, element, $compile, uiData) {
         if (scope.srcIs == 'background') {
-            element[0].style.background = scope.backgroundLoadingStyle;
+            element.css('background',scope.backgroundLoadingStyle);            
         } else {
             extend(scope, default_circle_style);
-            var progress_circle;
-
+            var progress_circle;            
             function addCircle() {
                 progress_circle = makeProgressCircle(scope, $compile);
                 uiData.display = element.css('display');
@@ -82,6 +89,34 @@
         }
     };
     //****************************************************************************************************//
+    function id() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < 16; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    };
+
+    function startsWith(str, arr) {
+        for (var i = 0; i < arr.length; i++) {
+            var sub_str = arr[i];
+            if (str.indexOf(sub_str) === 0) {
+                return true;
+            }
+        }
+        return false;
+    };
+    function needDownload(path) {
+        if (startsWith(path, [
+            'http://',
+            'https://',
+            'ftp://'
+        ])) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
 
     var default_config = {
@@ -93,7 +128,7 @@
         uiOnProgress: uiOnProgress,
         expire: Infinity
     };
-
+    var getCacheDir = function(){};
     angular
         .module('ionic-cache-src', [
             'ionic',
@@ -119,19 +154,31 @@
         })
         .factory('cacheSrcStorage', function($localStorage) {
             var c = {};
-            c._cache = $localStorage.cache_src;
+            c._cache = $localStorage.cache_src || {};
             c.get = function(url) {
-                return c._cache[url] && (getCacheDir() + c._cache[url]);
+                if(needDownload(url)){
+                    var cache_url = c._cache[url] && (getCacheDir() + c._cache[url]);
+                    return cache_url || url;                        
+                }
+                return undefined;                
             };
             c.set = function(url, localUrl) {
                 c._cache[url] = localUrl;
                 return c;
             };
+            c.reset = function(url){
+                if(url != undefined)
+                    delete $localStorage.cache_src[url];
+                else
+                    $localStorage.cache_src = {};                
+            };
+                        
             return c;
         })
         .directive('cacheSrc', function($ionicPlatform, $window, $interval, $timeout, $compile, $cacheSrc, $cordovaFileTransfer, $localStorage) {
             return {
                 restrict: 'A',
+                priority: 99, 
                 scope: {
                     'onProgress': '=?',
                     'onFinish': '=?',
@@ -144,38 +191,8 @@
                 },
                 link: function(scope, element, attrs) {
 
-                    function id() {
-                        var text = "";
-                        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                        for (var i = 0; i < 16; i++)
-                            text += possible.charAt(Math.floor(Math.random() * possible.length));
-                        return text;
-                    };
-
-                    function startsWith(str, arr) {
-                        for (var i = 0; i < arr.length; i++) {
-                            var sub_str = arr[i];
-                            if (str.indexOf(sub_str) === 0) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    };
-
-
-                    function needDownload(path) {
-                        if (startsWith(path, [
-                                'http://',
-                                'https://',
-                                'ftp://'
-                            ])) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    };
-
-
+                    
+                    // debugger;
                     extend(scope, $cacheSrc);                    
                     for (var k in attrs) {
                         if (!angular.isFunction(scope[k])) {
@@ -192,25 +209,21 @@
                     scope.uiOnProgress = ensureFunction(scope.uiOnProgress, angular.noop); //use default ones
                     scope.uiOnFinish = ensureFunction(scope.uiOnFinish, angular.noop);
                     scope.uiOnStart = ensureFunction(scope.uiOnStart, angular.noop);
-
-
+                    
+                    
                     function addSrcWithoutFinish(result) {
                         if (scope.srcIs == 'background') {
-                            element[0].style.background = "url('" + result + "') " + scope.backgroundStyle;
-                        } else {
-                            element[0][scope.srcIs || 'src'] = result;
+                            getElement(element).css('background',"url('" + result + "') " + scope.backgroundStyle);
+                        } else {                            
+                            getElement(element).attr(scope.srcIs || 'src',result);                                                       
                         }
                     }
-
                     function addSrc(result) {
                         addSrcWithoutFinish(result);
                         scope.onFinish(result);
                     };
-
-
-
                     if ($window.cordova) {
-                        function getCacheDir() {
+                        var getCacheDir = function () {
                             switch (device.platform) {
                                 case 'iOS':
                                     return $window.cordova.file.documentsDirectory;
@@ -219,10 +232,8 @@
                             }
                             return '';
                         };
-
                         var cache = $localStorage.cache_src = $localStorage.cache_src || {};
                         var create_time = $localStorage.cache_src_create_time = $localStorage.cache_src_create_time || {};
-
                         function fetchRemoteWithoutLoading(){
                             var ext = '.' + attrs.cacheSrc.split('.').pop();
                             var fileName = id() + ext;
@@ -235,83 +246,85 @@
                                     }
                                     addSrc(getCacheDir() + fileName);
                                 }, scope.onError, angular.noop);
-                        }
-                        
+                        }                        
                         function fetchRemote() {
                             var uiData = {};
                             scope.onStart(attrs.cacheSrc);
-                            scope.uiOnStart(scope, element, $compile, uiData);
-
+                            var elem = getElement(element);
+                            scope.uiOnStart(scope, elem, $compile, uiData);
+                            
+                            
                             var ext = '.' + attrs.cacheSrc.split('.').pop();
                             var fileName = id() + ext;
                             $cordovaFileTransfer
                                 .download(attrs.cacheSrc, getCacheDir() + fileName, {}, true)
                                 .then(function() {
                                     cache[attrs.cacheSrc] = fileName;
-                                    // debugger;
                                     if (scope.expire !== Infinity) {
                                         create_time[attrs.cacheSrc] = Date.now();
                                     }
-                                    scope.uiOnFinish(scope, element, $compile, uiData);
+                                    scope.uiOnFinish(scope, elem, $compile, uiData);
                                     addSrc(getCacheDir() + fileName);
                                 }, scope.onError, function(progress) {
                                     uiData.progress = (progress.loaded / progress.total) * 100;
-                                    scope.uiOnProgress(scope, element, $compile, uiData);
+                                    scope.uiOnProgress(scope, elem, $compile, uiData);
                                     scope.onProgress(uiData.progress);
                                 });
 
                         }
-
                         function fetchCache() {
                             addSrc(getCacheDir() + cache[attrs.cacheSrc]);
                         }
+
+
+                        
                         $ionicPlatform
                             .ready()
                             .then(function() {
-                                attrs.$observe('cacheSrc',
+                                scope.$watch('attrs.cacheSrc',
                                                function() {
                                                    // debugger;
-                                        if (attrs.cacheSrc) {
-                                            if (needDownload(attrs.cacheSrc)) {
-                                                if (cache[attrs.cacheSrc]) {
-                                                    var now = Date.now();
-                                                    var create = create_time[attrs.cacheSrc] || Infinity;
-                                                    if (now - create < scope.expire * 1000) {
-                                                        fetchCache();
-                                                    } else {
-                                                        // alert('Cache expired');
-                                                        addSrcWithoutFinish(getCacheDir() + cache[attrs.cacheSrc]);
-                                                        fetchRemoteWithoutLoading();
-                                                    }
-                                                } else {
-                                                    fetchRemote();
-                                                }
-                                            } else {
-                                                addSrc(attrs.cacheSrc);
-                                            }
-                                        }
-                                    });
+                                                   if (attrs.cacheSrc) {
+                                                       if (needDownload(attrs.cacheSrc)) {
+                                                           if (cache[attrs.cacheSrc]) {
+                                                               var now = Date.now();
+                                                               var create = create_time[attrs.cacheSrc] || Infinity;
+                                                               if (now - create < scope.expire * 1000) {
+                                                                   fetchCache();
+                                                               } else {
+                                                                   // alert('Cache expired');
+                                                                   addSrcWithoutFinish(getCacheDir() + cache[attrs.cacheSrc]);
+                                                                   fetchRemoteWithoutLoading();
+                                                               }
+                                                           } else {
+                                                               fetchRemote();
+                                                           }
+                                                       } else {
+                                                           addSrc(attrs.cacheSrc);
+                                                       }
+                                                   }
+                                               });
                             });
                     } else {
                         // in browser                        
-                        attrs.$observe('cacheSrc', function() {
+                        scope.$watch('attrs.cacheSrc', function() {
                             if (attrs.cacheSrc) {
                                 if (needDownload(attrs.cacheSrc)) {
-
+                                    var elem = getElement(element);
                                     var uiData = {};
                                     scope.onStart(attrs.cacheSrc);
-                                    scope.uiOnStart(scope, element, $compile, uiData);
+                                    scope.uiOnStart(scope, elem, $compile, uiData);
                                     
                                     uiData.progress = scope.progress || 0;
                                     // debugger;
                                     var promise = $interval(function() {
                                         uiData.progress += 10;
-                                        scope.uiOnProgress(scope, element, $compile, uiData);
+                                        scope.uiOnProgress(scope, elem, $compile, uiData);
                                         scope.onProgress(uiData.progress);
 
                                         if (uiData.progress == 100) {
                                             $interval.cancel(promise);
-                                            scope.uiOnFinish(scope, element, $compile, uiData);
+                                            scope.uiOnFinish(scope, elem, $compile, uiData);
                                             addSrc(attrs.cacheSrc);
                                         }
                                     }, scope.interval);

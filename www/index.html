@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/ionic/release/css/ionic.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -14,15 +14,15 @@
     -->
 
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/release/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>    
+    <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
     <!-- <script src="cordova.js"></script> -->
     <!-- <script src="cordova_plugins.js"></script> -->
 
 
-    <!-- ionic-cache-src -->   
+    <!-- ionic-cache-src -->
     <script src="cordova.js"></script>
     <script src="lib/ngstorage/ngStorage.min.js"></script>
     <script src="lib/angular-svg-round-progressbar/build/roundProgress.min.js"></script>
@@ -40,69 +40,183 @@
         <ion-header-bar class="bar-stable">
             <h1 class="title">Ionic Blank Starter</h1>
         </ion-header-bar>
-        <ion-content>
-            <div class="list card">
-                <div class="item">
-                    <h2>Local Image</h2>
-                    <p>img/Rilakkuma.jpg</p>
-                </div>
 
-                <div class="item item-image">
-                    <img on-finish="onFinishLocal" on-progress="onProgressLocal" on-start="onStartLocal" cache-src="img/Rilakkuma.jpg">
-                </div>
-            </div>
-
-            <div class="list card">
-                <div class="item">
-                    <h2>Remote Image 1</h2>
-                    <p>http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg</p>
-                </div>
-
-                <div class="item item-image">
-                    <img on-finish="onFinishRemoteFirst" expire="{{60}}" on-start="onStartRemoteFirst" on-progress="onProgressRemoteFirst" cache-src="http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg">
-                </div>
-            </div>
+        <ion-nav-view></ion-nav-view>
 
 
-            <div class="list card">
-                <div class="item">
-                    <h2>Remote Image 2</h2>
-                    <p>http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg</p>
-                </div>
-
-                <div class="item item-image">
-                    <img on-finish="onFinishRemoteSecond" on-start="onStartRemoteSecond" on-progress="onProgressRemoteSecond" cache-src="http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg">
-                </div>
-            </div>
 
 
-            <div class="list">
-                <a class="item item-avatar" href="#">
-                    <img cache-src="http://x1.zhuti.com/down/2012/12/13-win7/llx-1.jpg" circle-container-style="display:inline-block;position:absolute;left:30px;">
-                    <h2>inline progress circle</h2>
-                    <p>Test Progress Circle as inline block</p>
-                </a>
-            </div>
 
 
-            <div class="card">
-                <div class="item item-text-wrap" cache-src="http://farm4.static.flickr.com/3131/2877192571_3eb8bcf431.jpg" src-is="background">
-                    Test Background Image In Here
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                </div>
-            </div>
-            
-        </ion-content>
+
+
+
+        <!-- </ion-content> -->
     </ion-pane>
 </body>
+
+
+
+<script id="templates/tabs.html" type="text/ng-template">
+  
+    <ion-tabs class="tabs-icon-top tabs-positive">
+
+        <ion-tab title="Common" icon="ion-ionic" ui-sref="tabs.common">
+            <ion-nav-view name="common-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="NgRepeat" icon="ion-arrow-right-c"  ui-sref="tabs.ngRepeat">
+            <ion-nav-view name="ngRepeat-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="CollectionRepeat"  icon="ion-ios-fastforward" ui-sref="tabs.collectionRepeat">
+            <ion-nav-view name="collectionRepeat-tab"></ion-nav-view>
+        </ion-tab>
+        
+        <ion-tab title="video" icon="ion-ios-videocam-outline" ui-sref="tabs.video">
+          <ion-nav-view name="video-tab"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+    
+</script>
+
+<script id="templates/common.html" type="text/ng-template">
+    <ion-content>
+        <div class="list card">
+            <div class="item">
+                <h2>Local Image</h2>
+                <p>img/Rilakkuma.jpg</p>
+            </div>
+
+            <div class="item item-image">
+                <img on-finish="onFinishLocal" on-progress="onProgressLocal" on-start="onStartLocal" cache-src="img/Rilakkuma.jpg">
+            </div>
+        </div>
+
+
+
+        <div class="list card">
+            <div class="item">
+                <h2>Remote Image 1</h2>
+                <p>http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg</p>
+            </div>
+
+            <div class="item item-image">
+                <img on-finish="onFinishRemoteFirst" expire="{{60}}" on-start="onStartRemoteFirst" on-progress="onProgressRemoteFirst" cache-src="http://img4.duitang.com/uploads/item/201207/15/20120715210547_vykfz.thumb.600_0.jpeg">
+            </div>
+        </div>
+
+
+        <div class="list card">
+            <div class="item">
+                <h2>Remote Image 2</h2>
+                <p>http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg</p>
+            </div>
+
+            <div class="item item-image">
+                <img on-finish="onFinishRemoteSecond" on-start="onStartRemoteSecond" on-progress="onProgressRemoteSecond" cache-src="http://img4.duitang.com/uploads/blog/201407/19/20140719142216_2aQ8c.jpeg">
+            </div>
+        </div>
+
+
+        <div class="list">
+            <a class="item item-avatar" href="#">
+                <img cache-src="https://sdl-stickershop.line.naver.jp/products/0/0/10/616/LINEStorePC/main.png" circle-container-style="display:inline-block;position:absolute;left:30px;">
+                <h2>inline progress circle</h2>
+                <p>Test Progress Circle as inline block</p>
+            </a>
+        </div>
+
+
+
+
+
+        <div class="card">
+            <div class="item item-text-wrap" cache-src="http://farm4.static.flickr.com/3131/2877192571_3eb8bcf431.jpg" src-is="background">
+                Test Background Image In Here
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </ion-content>
+</script>
+
+<script id="templates/ngRepeat.html" type="text/ng-template">
+    <ion-content>
+        <div class="list card" ng-repeat="url in ['http://img.ltn.com.tw/Upload/liveNews/BigPic/600_phpdnlnun.jpg',
+                                              'http://www.pinchain.com/wp-content/uploads/2015/08/xiong150824a.jpg',
+                                              'http://img.weixinyidu.com/150819/920b7360.jpg']">
+            <div class="item">
+                <h2>Ng-repeat test {{$index+1}}</h2>
+                <p>{{url}}</p>
+            </div>
+
+            <div class="item item-image">
+                <img cache-src="{{url}}">
+            </div>
+        </div>
+
+    </ion-content>
+
+</script>
+
+<script id="templates/collectionRepeat.html" type="text/ng-template">
+    <ion-content>
+      <br/>
+      <br/>
+      <br/>
+      <div class="list card"
+           collection-repeat="url in [
+                              [1,'http://static.ettoday.net/images/1204/d1204143.jpg'],
+                              [2,'http://cdn2.ettoday.net/images/1232/d1232399.jpg'],
+                              [3,'http://twimg.edgesuite.net/images/ReNews/20150810/640_0da03590d5318534076a272cc1b9c4f5.jpg'],
+                              [4,'http://hk.on.cc/hk/bkn/cnt/news/20150526/photo/bkn-20150526213153566-0526_00822_001_01b.jpg'],
+                              [5,'http://4.bp.blogspot.com/-vnBmp8R7OGY/VW9RwmIEJTI/AAAAAAAHYIM/c-WQa3VYx8M/s640/SEB201307240015.jpg'],
+                              [6,'http://p1-news.yamedia.tw/MjY0MzYxMjhuZXdz/b7e55682c66c4ff8.jpg']]"
+
+           collection-item-height="400px"
+           >
+
+
+        <div class="item item-image">
+          <div class="item">
+            Collection Repeat Test {{$index +1}}, the {{url[0]}}th image.
+          </div>          
+                <img cache-src="{{url[1]}}"> 
+            </div>
+            
+        </div>
+    </ion-content>
+</script>
+
+
+<script id="templates/video.html" type="text/ng-template">
+  <ion-content>
+
+    <br/>
+    <br/>
+    <div class="list card" >
+            <div class="item">
+                <h2>Test Video</h2>
+            </div>
+
+            <div class="item item-image">
+                    <video id="video" width="400"  controls>
+                      <source cache-src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+                          Your browser does not support HTML5 video.
+                    </video>
+            </div>
+        </div>
+  </ion-content>
+</script>
+
 
 </html>

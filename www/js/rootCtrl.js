@@ -1,10 +1,9 @@
-app.controller('rootCtrl',function($scope,$log){
+app.controller('rootCtrl',function($scope,$log, cacheSrcStorage){
     var log = function(x){
-        // if(window.cordova)
-        //     alert(x);
         $log.info(x);
     };
 
+    console.log(cacheSrcStorage.get("http://farm4.static.flickr.com/3131/2877192571_3eb8bcf431.jpg"));
    
     $scope.onFinishLocal = function(){
         log('Local Finished');  
