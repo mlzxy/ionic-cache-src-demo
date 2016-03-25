@@ -66,3 +66,9 @@ var app = angular.module('starter', ['ionic', 'ionic-cache-src'])
     $urlRouterProvider.otherwise("/tab/common");
 
 });
+
+// .config(function($cacheSrcProvider){
+//     $cacheSrcProvider.set('onError',function(e,x){
+//         console.log(e,x);
+//     });
+// });
